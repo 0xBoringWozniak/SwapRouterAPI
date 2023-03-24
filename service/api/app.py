@@ -5,12 +5,11 @@ from typing import Any, Dict
 import uvloop
 from fastapi import FastAPI
 
-from service.log import app_logger, setup_logging
-from service.settings import ServiceConfig
 from service.api.exception_handlers import add_exception_handlers
 from service.api.middlewares import add_middlewares
 from service.api.views import add_views
-
+from service.log import app_logger, setup_logging
+from service.settings import ServiceConfig
 
 __all__ = ("create_app",)
 

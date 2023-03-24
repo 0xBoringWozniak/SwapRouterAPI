@@ -1,14 +1,13 @@
-from typing import Dict
 from dataclasses import dataclass
+from typing import Dict
 
 from web3 import Web3
 
-from service.models import Trade, Pool
-from service.enums import Notional
-from service.mongo import MongoORM
-from service.utils import get_ethusd_price
-
 from service.engine.contracts import Connector, DEXConnectorRouter
+from service.enums import Notional
+from service.models import Pool, Trade
+from service.mongo import ORM
+from service.utils import get_ethusd_price
 
 
 @dataclass
@@ -24,7 +23,10 @@ class SwapRouter:
     """
     Swap Router class for the API engine.
     """
-    def __init__(self, trade: Trade, mongo_orm: MongoORM, node: Web3.HTTPProvider) -> None:
+    def __init__(
+                self, trade: Trade,
+                mongo_orm: ORM, node: Web3
+            ) -> None:
         """
         Args:
             trade (Trade): trade object
@@ -33,10 +35,10 @@ class SwapRouter:
         self.__init_orm(mongo_orm)
         self._node = node
 
-    def __init_orm(self, mongo_orm: MongoORM) -> None:
+    def __init_orm(self, mongo_orm: ORM) -> None:
         self._orm = mongo_orm
         self._orm.database = 'dataprod'
-    
+
     def find_pool(self) -> Pool:
         """
         Find a pool for a given trade.

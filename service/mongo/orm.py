@@ -1,14 +1,15 @@
-from typing import List
+from typing import Dict, List
 
 from bson import BSON
 from pymongo import MongoClient
 
 from service.models import Pool
+from service.mongo.abc_orm import ORM
 from service.mongo.codecs import codec_options
 from service.mongo.exceptions import EmptyDataBaseException
 
 
-class MongoORM:
+class MongoORM(ORM):
     """
     Mongo ORM.
     """
@@ -21,12 +22,12 @@ class MongoORM:
             mongo_uri (str): mongo uri in format mongodb://<user>:<password>@<host>:<port>
                              should be passed from env variable from creds.py
         """
-        self._client = MongoClient(mongo_uri)
-        self._database = None
+        self._client: MongoClient = MongoClient(mongo_uri)
+        self._database: str = None
 
     @property
     def database(self):
-        self._database
+        return self._database
 
     @database.setter
     def database(self, database: str):
@@ -66,13 +67,13 @@ class MongoORM:
         """
         self.__check_databse()
         collection = self._client[self._database][f'{symbol.lower()}_pools']
-        encoded_dict = BSON.decode(BSON.encode(pool.dict(), codec_options=codec_options))
+        encoded_dict: Dict = BSON.decode(BSON.encode(pool.dict(), codec_options=codec_options))
         collection.insert_one(encoded_dict)
-    
+
     def add_pools(self, symbol: str, pools: List[Pool]) -> None:
         """
         Add pools to database. Pool object is converted to dict and then to bson.
-    
+
         Args:
             symbol (str): symbol of the token
             pools (List[Pool]): list of pools

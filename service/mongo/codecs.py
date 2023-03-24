@@ -1,6 +1,6 @@
-from bson.codec_options import TypeCodec, TypeRegistry, CodecOptions
+from bson.codec_options import CodecOptions, TypeCodec, TypeRegistry
 
-from service.enums import Notional, DEX
+from service.enums import DEX, Notional
 
 
 class DexCodec(TypeCodec):
@@ -15,7 +15,7 @@ class DexCodec(TypeCodec):
 
     def transform_bson(self, value):
         return DEX(value)
-    
+
 
 class NotionalCodec(TypeCodec):
     """
@@ -29,8 +29,9 @@ class NotionalCodec(TypeCodec):
 
     def transform_bson(self, value):
         return Notional(value)
-    
+
+
 # apply codecs
-codec_options = CodecOptions(
+codec_options: CodecOptions = CodecOptions(
     type_registry=TypeRegistry([DexCodec(), NotionalCodec()])
 )

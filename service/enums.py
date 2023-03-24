@@ -9,6 +9,7 @@ class DEX(Enum):
     UNISWAP_V2 = 'uniswap_v2'
     CURVE = 'curve'
 
+
 class Notional(Enum):
     """
     For now, we only support USDC/WETH.

@@ -1,4 +1,5 @@
 import typing as tp
+
 from pydantic import BaseModel
 
 from service.enums import DEX, Notional
@@ -8,7 +9,7 @@ class Error(BaseModel):
     """
     Base error model for all errors in the API.
     """
-    error_key: str                      
+    error_key: str
     error_message: str
     error_loc: tp.Optional[tp.Any] = None
 
