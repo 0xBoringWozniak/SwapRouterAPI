@@ -21,9 +21,7 @@ class LogConfig(Config):
 
 
 class ServiceConfig(Config):
-    service_name: str = "reco_service"
-    k_recs: int = 10
-
+    service_name: str = "swap_api_service"
     log_config: LogConfig
 
 

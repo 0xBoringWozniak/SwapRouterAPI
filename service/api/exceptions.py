@@ -26,3 +26,25 @@ class AuthorizationError(AppException):
         error_loc: tp.Optional[tp.Sequence[str]] = None,
      ) -> None:
         super().__init__(status_code, error_key, error_message, error_loc)
+
+
+class SwapRouterLogicError(AppException):
+    def __init__(
+        self,
+        status_code: int = HTTPStatus.INTERNAL_SERVER_ERROR,
+        error_key: str = "swap_router_logic_error",
+        error_message: str = "Swap router logic error",
+        error_loc: tp.Optional[tp.Sequence[str]] = None,
+     ) -> None:
+        super().__init__(status_code, error_key, error_message, error_loc)
+
+
+class SymbolError(AppException):
+    def __init__(
+        self,
+        status_code: int = HTTPStatus.BAD_REQUEST,
+        error_key: str = "symbol_error",
+        error_message: str = "There is no pools for this symbol",
+        error_loc: tp.Optional[tp.Sequence[str]] = None,
+     ) -> None:
+        super().__init__(status_code, error_key, error_message, error_loc)
