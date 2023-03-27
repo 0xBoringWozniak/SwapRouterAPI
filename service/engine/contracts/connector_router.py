@@ -1,6 +1,7 @@
 from web3 import Web3
 
 from service.engine.contracts.connector import Connector
+from service.engine.contracts.curve import CurveConnector
 from service.engine.contracts.uniswap_v2 import UniswapV2Connector
 from service.engine.contracts.uniswap_v3 import UniswapV3Connector
 from service.enums import DEX
@@ -44,6 +45,11 @@ class DEXConnectorRouter:
         if pool.dex == DEX.UNISWAP_V3:
             return UniswapV3Connector(
                 node=node, zfo=pool.zfo,
+                fees=pool.fees, token0=pool.token0, token1=pool.token1
+            )
+        if pool.dex == DEX.CURVE:
+            return CurveConnector(
+                node=node, address=pool.address, zfo=pool.zfo,
                 fees=pool.fees, token0=pool.token0, token1=pool.token1
             )
         raise NotImplementedError

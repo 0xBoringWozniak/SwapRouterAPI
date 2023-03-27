@@ -59,7 +59,7 @@ lint: isort flake mypy pylint
 # Test
 
 .pytest:
-	pytest
+	pytest -s -v
 
 test: .venv .pytest
 

@@ -38,7 +38,7 @@ class Pool(BaseModel):
     address: str            # pool ethereum address
     dex: DEX                # dex type (e.g. UniswapV2)
     notional: Notional      # notional type (e.g. usdc/weth)
-    zfo: bool               # is zfo pool
+    zfo: int                # is zfo pool (for curve i,y indexes in 2 digits)
     fees: float             # pool fees (e.g. 0.003)
     token0: Token           # token0 in pool
     token1: Token           # token1 in pool

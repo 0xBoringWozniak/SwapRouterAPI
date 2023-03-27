@@ -14,7 +14,7 @@ class UniswapV3Connector(Connector):
     def __init__(
                 self,
                 node: Web3,
-                zfo: bool,
+                zfo: int,
                 token0: Token,
                 token1: Token,
                 fees: float,

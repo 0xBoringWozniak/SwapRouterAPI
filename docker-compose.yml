@@ -1,0 +1,44 @@
+version: '3.7'
+
+services:
+  mongo_db:
+    build: 
+      context: .
+      dockerfile: Dockerfile_mongodb
+    networks:
+      - swap_api_network
+    ports:
+      - 27017:27017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=secret
+      - MONGO_INITDB_DATABASE=dataprod
+
+  populate_pools:
+    build: 
+      context: .
+      dockerfile: Dockerfile_populate
+    depends_on:
+      - mongo_db
+      - api
+    networks:
+      - swap_api_network
+    env_file:
+      - env.txt
+    command: python3 service/mongo/populate_db.py
+    restart: "no"
+
+  api:
+    build: .
+    ports:
+      - 8000:8000
+    depends_on:
+      - mongo_db
+    env_file:
+      - env.txt
+    networks:
+      - swap_api_network
+
+networks:
+  swap_api_network:
+    driver: bridge
