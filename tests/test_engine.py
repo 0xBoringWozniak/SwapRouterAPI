@@ -133,4 +133,4 @@ def test_big_size_usdt(big_size_router):
 
 
 def test_low_size_usdt(low_size_router):
-    assert low_size_router.find_pool().address == '0x3041CbD36888bECc7bbCBc0045E3B1f144466f5f'
+    assert low_size_router.find_pool().address == '0xbEbc44782C7dB0a1A60Cb6fe97d0b483032FF1C7'

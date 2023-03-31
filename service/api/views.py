@@ -1,13 +1,13 @@
-from typing import Tuple
+from typing import Dict, List, Tuple
 
-from fastapi import APIRouter, FastAPI
+from fastapi import APIRouter, Depends, FastAPI
 from web3 import Web3
 
 from service.api.exceptions import SwapRouterLogicError, SymbolError
 from service.creds import HTTP_NODE, MONGO_URI
 from service.engine import SwapRouter
 from service.log import app_logger
-from service.models import Pool, Trade
+from service.models import Pool, PoolWithTradeStats, Trade, TradeStats
 from service.mongo import MongoORM
 
 router = APIRouter()
@@ -34,12 +34,12 @@ async def health() -> str:
     return "I am alive"
 
 
-@router.post(
+@router.get(
     path="/find_pool",
     tags=["Find Pool"],
     response_model=Pool,
 )
-async def find_pool(trade: Trade) -> Pool:
+async def find_pool(trade: Trade = Depends()) -> Pool:
     """
     Find a pool for a given trade.
     """
@@ -50,6 +50,30 @@ async def find_pool(trade: Trade) -> Pool:
     try:
         swap_router = SwapRouter(trade=trade, mongo_orm=MONGO_ORM, node=NODE)
         return swap_router.find_pool()
+    except Exception as e:
+        raise SwapRouterLogicError(error_message=str(e)) from e
+
+
+@router.get(
+    path="/trades_stats",
+    tags=["Find Pool"],
+    response_model=List[PoolWithTradeStats],
+)
+async def trades_stats(trade: Trade = Depends()) -> List[PoolWithTradeStats]:
+    """
+    Find a pool for a given trade.
+    """
+    pools = MONGO_ORM.get_all_pools_by_symbol(trade.token_in_symbol)
+    app_logger.info("Found %s pools for %s", len(pools), trade.token_in_symbol)
+    if not pools:
+        raise SymbolError(error_loc=trade.token_in_symbol)
+    try:
+        swap_router = SwapRouter(trade=trade, mongo_orm=MONGO_ORM, node=NODE)
+        all_trades_stats: Dict[Pool, TradeStats] = swap_router.get_all_trades_stats()
+        return [
+            PoolWithTradeStats(pool=pool, trade_stats=trade_stats)
+            for pool, trade_stats in all_trades_stats.items()
+        ]
     except Exception as e:
         raise SwapRouterLogicError(error_message=str(e)) from e
 

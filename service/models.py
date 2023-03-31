@@ -46,3 +46,19 @@ class Pool(BaseModel):
     # make it hashable to store in set/dict
     def __hash__(self):
         return hash(self.address)
+
+
+class TradeStats(BaseModel):
+    """
+    Trade stats.
+    """
+    amount_out: float           # amount of token_out
+    amount_out_in_usd: float    # amount of token_out in usd
+
+
+class PoolWithTradeStats(BaseModel):
+    """
+    Pool with trade stats.
+    """
+    pool: Pool
+    trade_stats: TradeStats
