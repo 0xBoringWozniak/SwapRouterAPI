@@ -36,6 +36,8 @@ class SwapRouter:
         """
         trades_stats: Dict[Pool, TradeStats] = self.get_all_trades_stats()
         # find dex with the highest token_out_in_usd
+        # exclude pools from self.trade.excludes_dexes
+        trades_stats = {k: v for k, v in trades_stats.items() if k.dex not in self.trade.excluded_dexes}
         best_one = max(trades_stats, key=lambda x: trades_stats[x].amount_out_in_usd)
         return best_one
 

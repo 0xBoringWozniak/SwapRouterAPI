@@ -18,8 +18,9 @@ class Trade(BaseModel):
     """
     Trade entity.
     """
-    amount: float           # amount of token_in
-    token_in_symbol: str    # token_in symbol (e.g. USDT)
+    amount: float                                   # amount of token_in
+    token_in_symbol: str                            # token_in symbol (e.g. USDT)
+    excluded_dexes: tp.Optional[tp.Set[DEX]] = set() # excluded dexes (e.g. UniswapV2)
 
 
 class Token(BaseModel):

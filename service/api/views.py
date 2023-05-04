@@ -34,12 +34,12 @@ async def health() -> str:
     return "I am alive"
 
 
-@router.get(
+@router.post(
     path="/find_pool",
     tags=["Find Pool"],
     response_model=Pool,
 )
-async def find_pool(trade: Trade = Depends()) -> Pool:
+async def find_pool(trade: Trade) -> Pool:
     """
     Find a pool for a given trade.
     """
@@ -54,12 +54,12 @@ async def find_pool(trade: Trade = Depends()) -> Pool:
         raise SwapRouterLogicError(error_message=str(e)) from e
 
 
-@router.get(
+@router.post(
     path="/trades_stats",
     tags=["Find Pool"],
     response_model=List[PoolWithTradeStats],
 )
-async def trades_stats(trade: Trade = Depends()) -> List[PoolWithTradeStats]:
+async def trades_stats(trade: Trade) -> List[PoolWithTradeStats]:
     """
     Find a pool for a given trade.
     """
